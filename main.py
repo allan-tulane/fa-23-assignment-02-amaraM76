@@ -46,10 +46,36 @@ def pad(x,y):
 
 
 def subquadratic_multiply(x, y):
+    x_str = str(x.decimal_val)  # Use the decimal_val attribute of BinaryNumber
+    y_str = str(y.decimal_val)  # Use the decimal_val attribute of BinaryNumber
+    
+    if len(x_str) == 1 or len(y_str) == 1:
+        return x.decimal_val * y.decimal_val
+
+    n = max(len(x_str), len(y_str))
+    split = n // 2
+    
+    x_high, x_low = split_number(x.binary_vec)
+    y_high, y_low = split_number(y.binary_vec)
+
+    
+
+    a = subquadratic_multiply(BinaryNumber(x_high), BinaryNumber(y_high))
+    b = subquadratic_multiply(BinaryNumber(x_low), BinaryNumber(y_low))
+    c = subquadratic_multiply(BinaryNumber(x_high + x_low), BinaryNumber(y_high + y_low)) - a - b
+
+    length = len(x.binary_vec) // 2
+    left = bit_shift(a, len(x.binary_vec))
+    d = bit_shift(c, length)
+    a = bit_shift(a, length)
+
+    result = BinaryNumber(left.decimal_val + d.decimal_val + b.decimal_val)
+
+    return result
+
     ### TODO
     pass
     ###
-
 
 
 def time_multiply(x, y, f):
